@@ -109,5 +109,5 @@ volumes:
   pgadmin-data:
 
 networks:
-  app-network-devel-devel:
+  app-network-devel:
     driver: bridge
