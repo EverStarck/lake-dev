@@ -98,8 +98,8 @@ services:
       timeout: 5s
       retries: 5
       start_period: 300s
-    ports:
-      - "8889:80"
+    # ports:
+    #   - "8889:80"
     build:
       context: ./backend
       dockerfile: backend.dockerfile
