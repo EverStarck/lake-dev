@@ -8,8 +8,8 @@ services:
       retries: 5
       start_period: 30s
       timeout: 10s
-    networks:
-      - app-network-devel
+    # networks:
+    #   - app-network-devel
     ports:
       - "5433:5432"
     volumes:
@@ -18,34 +18,34 @@ services:
       - .env
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
-    labels:
+    # labels:
       # This means the container will be stopped during backup to ensure backup integrity.
-      - docker-volume-backup.stop-during-backup=true
+      # - docker-volume-backup.stop-during-backup=true
 
-  backup:
-    image: offen/docker-volume-backup:latest
-    restart: always
-    networks:
-      - app-network-devel
-    depends_on:
-      db:
-        condition: service_healthy
-    env_file:
-      - .env
-    environment:
-      # Enable notification settings from environment variables
-      - NOTIFICATION_URLS=${TELEGRAM_NOTIFICATION_URL:-}
-      - NOTIFICATION_LEVEL=${BACKUP_NOTIFICATION_LEVEL:-error}
-    volumes:
-      - postgres_data:/backup/postgres:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      # Local path to store the backup archives
-      # - ${BACKUP_ARCHIVE_PATH:-./backups}:/archive
+  # backup:
+  #   image: offen/docker-volume-backup:latest
+  #   restart: always
+  #   # networks:
+  #   #   - app-network-devel
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     # Enable notification settings from environment variables
+  #     - NOTIFICATION_URLS=${TELEGRAM_NOTIFICATION_URL:-}
+  #     - NOTIFICATION_LEVEL=${BACKUP_NOTIFICATION_LEVEL:-error}
+  #   volumes:
+  #     - postgres_data:/backup/postgres:ro
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
+  #     # Local path to store the backup archives
+  #     # - ${BACKUP_ARCHIVE_PATH:-./backups}:/archive
 
   pgadmin:
     image: dpage/pgadmin4:latest
-    networks:
-      - app-network-devel
+    # networks:
+    #   - app-network-devel
     ports:
       - "5051:5050"
     depends_on:
@@ -69,8 +69,8 @@ services:
     build:
       context: ./backend
       dockerfile: backend.dockerfile
-    networks:
-      - app-network-devel
+    # networks:
+    #   - app-network-devel
     depends_on:
       db:
         condition: service_healthy
@@ -82,8 +82,8 @@ services:
   backend:
     image: "${DOCKER_IMAGE_BACKEND?Variable not set}:${TAG-latest}"
     restart: always
-    networks:
-      - app-network-devel
+    # networks:
+    #   - app-network-devel
     depends_on:
       db:
         condition: service_healthy
@@ -108,6 +108,6 @@ volumes:
   postgres_data:
   pgadmin-data:
 
-networks:
-  app-network-devel:
-    driver: bridge
+# networks:
+#   app-network-devel:
+#     driver: bridge
